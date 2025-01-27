@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLua Linter</title>
+    <style>
+        /* Body Style (HL2 Look) */
+        body {
+            font-family: 'Verdana', sans-serif;
+            background-color: #1f1f1f;
+            color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Container for all the content */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: rgba(0, 0, 0, 0.75);
+            border: 2px solid #388dcb;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Title */
+        h2 {
+            text-align: center;
+            font-size: 32px;
+            color: #388dcb;
+            margin-bottom: 20px;
+        }
+
+        /* Textarea for Lua code */
+        textarea {
+            width: 100%;
+            height: 250px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            background-color: #2d2d2d;
+            border: 1px solid #888;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+            resize: none;
+            margin-bottom: 10px;
+        }
+
+        /* Button Style (HL2 inspired) */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #388dcb;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background-color: #2868a6;
+        }
+
+        /* Result box for error or success message */
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e74c3c;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            display: none;
+        }
+
+        /* Message for success (no error found) */
+        .result.success {
+            background-color: #27ae60;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>GLua Linter</h2>
+        <p style="text-align: center; color: #999;">Paste your Lua code below and check for syntax errors.</p>
+        <textarea id="luaCode" placeholder="Enter your Lua code here..."></textarea><br>
+        <button onclick="runLinter()">Lint Code</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/luaparse@0.2.1/luaparse.min.js"></script>
+    <script>
+        function runLinter() {
+            const luaCode = document.getElementById("luaCode").value;
+            const resultDiv = document.getElementById("result");
+
+            // Clear previous result
+            resultDiv.style.display = "none";
+
+            try {
+                // Attempt to parse Lua code
+                luaparse.parse(luaCode);
+                resultDiv.style.display = "block";
+                resultDiv.classList.remove('error');
+                resultDiv.classList.add('success');
+                resultDiv.innerHTML = 'No errors found!';
+            } catch (error) {
+                // Display error message
+                resultDiv.style.display = "block";
+                resultDiv.classList.remove('success');
+                resultDiv.classList.add('error');
+                resultDiv.innerHTML = 'Error: ' + error.message;
+            }
+        }
+    </script>
+
+</body>
+</html>
